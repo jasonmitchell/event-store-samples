@@ -14,17 +14,17 @@ namespace Streams
 {
     public class StreamWritingAndReading : IDisposable
     {
-        private readonly ClusterVNode _node;
-        private readonly ConnectionSettingsBuilder _connectionSettingsBuilder;
+        private readonly ClusterVNode node;
+        private readonly ConnectionSettingsBuilder connectionSettingsBuilder;
 
         public StreamWritingAndReading()
         {
-            _node = EmbeddedVNodeBuilder
+            node = EmbeddedVNodeBuilder
                 .AsSingleNode()
                 .OnDefaultEndpoints()
                 .RunInMemory();
 
-            _connectionSettingsBuilder = ConnectionSettings
+            connectionSettingsBuilder = ConnectionSettings
                 .Create()
                 .SetDefaultUserCredentials(new UserCredentials("admin", "changeit"))
                 .KeepReconnecting();
@@ -33,9 +33,9 @@ namespace Streams
         [Fact]
         public async Task WritesEventsToStream()
         {
-            await _node.StartAndWaitUntilReady();
+            await node.StartAndWaitUntilReady();
 
-            using (var connection = EmbeddedEventStoreConnection.Create(_node, _connectionSettingsBuilder))
+            using (var connection = EmbeddedEventStoreConnection.Create(node, connectionSettingsBuilder))
             {
                 var commitMetadata = new Dictionary<string, object> {{"CommitId", Guid.NewGuid()}};
                 var events = new[]
@@ -62,9 +62,9 @@ namespace Streams
         [Fact]
         public async Task ReadsEventsFromStream()
         {
-            await _node.StartAndWaitUntilReady();
+            await node.StartAndWaitUntilReady();
 
-            using (var connection = EmbeddedEventStoreConnection.Create(_node, _connectionSettingsBuilder))
+            using (var connection = EmbeddedEventStoreConnection.Create(node, connectionSettingsBuilder))
             {
                 var commitMetadata = new Dictionary<string, object> {{"CommitId", Guid.NewGuid()}};
                 var eventsToWrite = new[]
@@ -84,7 +84,7 @@ namespace Streams
 
         public void Dispose()
         {
-            _node.Stop();
+            node.Stop();
         }
     }
 }

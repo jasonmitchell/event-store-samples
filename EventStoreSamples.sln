@@ -13,10 +13,16 @@ Global
 		{6371127D-2CA9-4C9F-A961-E4998BFE7A02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6371127D-2CA9-4C9F-A961-E4998BFE7A02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6371127D-2CA9-4C9F-A961-E4998BFE7A02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8284BF5F-5C97-47D1-AE3E-77F366DB5217}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8284BF5F-5C97-47D1-AE3E-77F366DB5217}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8284BF5F-5C97-47D1-AE3E-77F366DB5217}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8284BF5F-5C97-47D1-AE3E-77F366DB5217}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
 	Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streams", "Streams\Streams.csproj", "{6371127D-2CA9-4C9F-A961-E4998BFE7A02}"
+	EndProject
+	Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aggregates", "Aggregates\Aggregates.csproj", "{8284BF5F-5C97-47D1-AE3E-77F366DB5217}"
 	EndProject
