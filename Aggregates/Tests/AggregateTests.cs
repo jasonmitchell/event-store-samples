@@ -4,7 +4,7 @@ using Aggregates.Sales;
 using FluentAssertions;
 using Xunit;
 
-namespace Aggregates
+namespace Aggregates.Tests
 {
     public class AggregateTests
     {
@@ -58,15 +58,10 @@ namespace Aggregates
                 new OrderItem(Guid.NewGuid(), 20),
             };
 
-            var events = new object[]
-            {
-                new OrderPlaced(orderId, orderItems),
-                new PaymentReceived(orderId, 45),
-                new OrderDelivered(orderId)
-            };
-
             var aggregate = (IAggregate)Activator.CreateInstance(typeof(Order), true);
-            aggregate.Apply(events);
+            aggregate.Apply(new OrderPlaced(orderId, orderItems));
+            aggregate.Apply(new PaymentReceived(orderId, 45));
+            aggregate.Apply(new OrderDelivered(orderId));
 
             var order = (Order) aggregate;
 

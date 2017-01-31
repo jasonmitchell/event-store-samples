@@ -15,34 +15,19 @@ namespace Aggregates
 
         protected void Given<TEvent>(Action<TEvent> handler)
         {
-            var eventType = typeof(TEvent);
-            handlers.Add(eventType, x => handler((TEvent)x));
+            handlers.Add(typeof(TEvent), x => handler((TEvent)x));
         }
 
         protected void Then<TEvent>(TEvent e)
         {
+            ((IAggregate)this).Apply(e);
             uncommittedEvents.Enqueue(e);
-            Apply(e);
         }
 
-        void IAggregate.Apply(IEnumerable<object> events)
+        void IAggregate.Apply(object e)
         {
-            foreach (var e in events)
-            {
-                Apply(e);
-                version++;
-            }
-        }
-
-        private void Apply(object e)
-        {
-            var eventType = e.GetType();
-
-            if (handlers.ContainsKey(eventType))
-            {
-                var handler = handlers[eventType];
-                handler(e);
-            }
+            handlers[e.GetType()](e);
+            version++;
         }
 
         void IAggregate.ClearUncommittedEvents()

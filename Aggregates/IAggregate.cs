@@ -9,7 +9,7 @@ namespace Aggregates
         int Version { get; }
         IEnumerable<object> UncommittedEvents { get; }
 
-        void Apply(IEnumerable<object> events);
+        void Apply(object e);
         void ClearUncommittedEvents();
     }
 }

@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Streams
 {
-    public class StreamWritingAndReading : IDisposable
+    public class StreamWritingAndReading
     {
         private readonly ClusterVNode node;
         private readonly ConnectionSettingsBuilder connectionSettingsBuilder;
