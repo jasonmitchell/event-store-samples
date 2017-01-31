@@ -1,1 +1,1 @@
-# event-store-samples
+HEY!
