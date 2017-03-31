@@ -12,6 +12,7 @@ namespace Aggregates
         public Guid Id { get; protected set; }
         int IAggregate.Version => version;
         IEnumerable<object> IAggregate.UncommittedEvents => uncommittedEvents;
+        IEnumerable<Type> IAggregate.EventTypes => handlers.Keys;
 
         protected void Given<TEvent>(Action<TEvent> handler)
         {
@@ -30,7 +31,7 @@ namespace Aggregates
             version++;
         }
 
-        void IAggregate.ClearUncommittedEvents()
+        void IAggregate.ClearEvents()
         {
             uncommittedEvents.Clear();
         }

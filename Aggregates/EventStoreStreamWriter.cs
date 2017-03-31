@@ -54,8 +54,7 @@ namespace Aggregates
         {
             var metadata = new Dictionary<string, object>
             {
-                ["$correlationId"] = correlationId,
-                ["Type"] = e.GetType().FullName
+                ["$correlationId"] = correlationId
             };
 
             return new EventData(Guid.NewGuid(), e.GetType().Name, true, Serialize(e), Serialize(metadata));

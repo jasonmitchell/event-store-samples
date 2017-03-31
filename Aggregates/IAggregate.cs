@@ -8,8 +8,9 @@ namespace Aggregates
         Guid Id { get; }
         int Version { get; }
         IEnumerable<object> UncommittedEvents { get; }
+        IEnumerable<Type> EventTypes { get; }
 
         void Apply(object e);
-        void ClearUncommittedEvents();
+        void ClearEvents();
     }
 }

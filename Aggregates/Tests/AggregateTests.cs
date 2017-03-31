@@ -42,7 +42,7 @@ namespace Aggregates.Tests
             order.DeliveredToRecipient();
 
             var aggregate = (IAggregate) order;
-            aggregate.ClearUncommittedEvents();
+            aggregate.ClearEvents();
 
             aggregate.UncommittedEvents.Should().HaveCount(0);
         }

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
@@ -18,7 +18,7 @@ namespace Aggregates
             this.connection = connection;
         }
 
-        public async Task<List<object>> Read(string streamName, int version)
+        public async Task<List<object>> Read(string streamName, int version, IDictionary<string, Type> eventTypeMap)
         {
             var events = new List<object>();
             var sliceStart = 0;
@@ -29,7 +29,7 @@ namespace Aggregates
                 slice = await connection.ReadStreamEventsForwardAsync(streamName, sliceStart, SliceSize(version, sliceStart), false);
                 sliceStart = slice.NextEventNumber;
 
-                events.AddRange(slice.Events.Select(Deserialize));
+                events.AddRange(slice.Events.Select(x => Deserialize(x, eventTypeMap)));
             } while (version >= slice.NextEventNumber && !slice.IsEndOfStream);
 
             return events;
@@ -41,11 +41,9 @@ namespace Aggregates
             return sliceStart + readPageSize <= version ? readPageSize : version - sliceStart + 1;
         }
 
-        private static object Deserialize(ResolvedEvent resolvedEvent)
+        private static object Deserialize(ResolvedEvent resolvedEvent, IDictionary<string, Type> eventTypeMap)
         {
-            var metadata = JsonConvert.DeserializeObject<Dictionary<string, object>>(Encoding.UTF8.GetString(resolvedEvent.Event.Metadata));
-            var eventType = Assembly.GetExecutingAssembly().GetType(metadata["Type"].ToString(), true);
-
+            var eventType = eventTypeMap[resolvedEvent.Event.EventType];
             return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(resolvedEvent.Event.Data), eventType, SerializerSettings);
         }
     }
