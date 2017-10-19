@@ -30,12 +30,13 @@ namespace Aggregates
             return aggregate;
         }
 
-        public Task Save<TAggregate>(TAggregate aggregate) where TAggregate : class, IAggregate
+        public async Task Save<TAggregate>(TAggregate aggregate) where TAggregate : class, IAggregate
         {
             var originalStreamVersion = aggregate.Version - aggregate.UncommittedEvents.Count();
             var expectedStreamVersion = originalStreamVersion == 0 ? ExpectedVersion.NoStream : originalStreamVersion - 1;
 
-            return streamWriter.Write(StreamName<TAggregate>(aggregate.Id), aggregate.UncommittedEvents, expectedStreamVersion);
+            await streamWriter.Write(StreamName<TAggregate>(aggregate.Id), aggregate.UncommittedEvents, expectedStreamVersion);
+            aggregate.ClearEvents();
         }
 
         private static IDictionary<string, Type> GetEventTypeMap<TAggregate>(TAggregate aggregate) where TAggregate : class, IAggregate
